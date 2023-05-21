@@ -60,7 +60,7 @@ async function run() {
 		});
 
 		//to update single toy data
-		app.put('/update_toy/:id', async (req, res) => {
+		app.patch('/update_toy/:id', async (req, res) => {
 			const id = req.params.id;
 			const toy = req.body;
 			// console.log(id);
