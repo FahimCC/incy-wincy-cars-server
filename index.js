@@ -29,7 +29,7 @@ async function run() {
 			.db('incyWincyCars')
 			.collection('toyCollection');
 
-		//for sending single toy data
+		//to send single toy data
 		app.get('/view_toy/:id', async (req, res) => {
 			const id = req.params.id;
 			// console.log(id);
@@ -38,7 +38,23 @@ async function run() {
 			res.send(result);
 		});
 
-		//for sending specific toy data
+		//to send specific toy data for all toy page
+		app.get('/all_toy', async (req, res) => {
+			const result = await toyCollection
+				.find()
+				.project({
+					sellerName: 1,
+					subCategory: 1,
+					toyName: 1,
+					price: 1,
+					availableQuantity: 1,
+				})
+				.limit(20)
+				.toArray();
+			res.send(result);
+		});
+
+		//to send specific toy data
 		app.get('/:sub_category', async (req, res) => {
 			const subCategory = req.params.sub_category;
 			const query = { subCategory: subCategory };
