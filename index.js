@@ -43,7 +43,40 @@ async function run() {
 			res.send(result);
 		});
 
-		//to send single toy data
+		//to send single toy data for update for
+		app.get('/update_toy/:id', async (req, res) => {
+			const id = req.params.id;
+			// console.log(id);
+			const query = { _id: new ObjectId(id) };
+			const options = {
+				projection: {
+					price: 1,
+					availableQuantity: 1,
+					detailsDescription: 1,
+				},
+			};
+			const result = await toyCollection.findOne(query, options);
+			res.send(result);
+		});
+
+		//to update single toy data
+		app.put('/update_toy/:id', async (req, res) => {
+			const id = req.params.id;
+			const toy = req.body;
+			// console.log(id);
+			const filter = { _id: new ObjectId(id) };
+			const updateDoc = {
+				$set: {
+					price: toy.price,
+					availableQuantity: toy.availableQuantity,
+					detailsDescription: toy.detailsDescription,
+				},
+			};
+			const result = await toyCollection.updateOne(filter, updateDoc);
+			res.send(result);
+		});
+
+		//to send single toy data for view toy
 		app.get('/view_toy/:id', async (req, res) => {
 			const id = req.params.id;
 			// console.log(id);
