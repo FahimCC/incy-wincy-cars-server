@@ -39,7 +39,7 @@ async function run() {
 		});
 
 		//to send specific toy data for all toy page
-		app.get('/all_toy', async (req, res) => {
+		app.get('/all_toys', async (req, res) => {
 			const result = await toyCollection
 				.find()
 				.project({
@@ -51,6 +51,14 @@ async function run() {
 				})
 				.limit(20)
 				.toArray();
+			res.send(result);
+		});
+
+		//to send specific toy data for my toy page
+		app.get('/my_toys/:email', async (req, res) => {
+			const email = req.params.email;
+			const query = { sellerEmail: email };
+			const result = await toyCollection.find(query).toArray();
 			res.send(result);
 		});
 
