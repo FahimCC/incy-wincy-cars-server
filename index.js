@@ -60,7 +60,7 @@ async function run() {
 		});
 
 		//to update single toy data
-		app.put('/update_toy/:id', async (req, res) => {
+		app.patch('/update_toy/:id', async (req, res) => {
 			const id = req.params.id;
 			const toy = req.body;
 			// console.log(id);
@@ -101,11 +101,29 @@ async function run() {
 			res.send(result);
 		});
 
+		//to send sort toy data
+		// app.get('/my_toys/:sort', async (req, res) => {
+		// 	const sort = parseInt(req.params.email);
+		// 	const options = {
+		// 		sort: { title: sort },
+		// 	};
+		// 	const result = await toyCollection.find(options).toArray();
+		// 	res.send(result);
+		// });
+
 		//to send specific toy data for my toy page
-		app.get('/my_toys/:email', async (req, res) => {
-			const email = req.params.email;
-			const query = { sellerEmail: email };
-			const result = await toyCollection.find(query).toArray();
+		app.get('/my_toys', async (req, res) => {
+			
+			let query = {};
+			if (req.query?.email) {
+				query = { sellerEmail: req.query.email };
+			}
+			const sort = req?.query?.sort;
+			
+			const options = {
+				sort: { price: sort },
+			};
+			const result = await toyCollection.find(query, options).toArray();
 			res.send(result);
 		});
 
