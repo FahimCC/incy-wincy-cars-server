@@ -29,6 +29,20 @@ async function run() {
 			.db('incyWincyCars')
 			.collection('toyCollection');
 
+		//create index for search
+		const indexKey = { toyName: 1 };
+		const indexOption = { name: 'toyIndex' };
+		await toyCollection.createIndex(indexKey, indexOption);
+		app.get('/all_toys/:searchText', async (req, res) => {
+			const searchText = req.params.searchText;
+			const result = await toyCollection
+				.find({
+					toyName: { $regex: searchText, $options: 'i' },
+				})
+				.toArray();
+			res.send(result);
+		});
+
 		//to send single toy data
 		app.get('/view_toy/:id', async (req, res) => {
 			const id = req.params.id;
