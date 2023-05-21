@@ -62,6 +62,14 @@ async function run() {
 			res.send(result);
 		});
 
+		//to delete specific toy data from my toy page
+		app.delete('/my_toys/:id', async (req, res) => {
+			const id = req.params.id;
+			const query = { _id: new ObjectId(id) };
+			const result = await toyCollection.deleteOne(query);
+			res.send(result);
+		});
+
 		//to send specific toy data
 		app.get('/:sub_category', async (req, res) => {
 			const subCategory = req.params.sub_category;
