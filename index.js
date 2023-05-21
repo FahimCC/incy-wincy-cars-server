@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -29,14 +29,28 @@ async function run() {
 			.db('incyWincyCars')
 			.collection('toyCollection');
 
-		//for trending toy data
-		app.get('/:sub_category', async (req, res) => {
-			const subCategory = req.params.sub_category;
-			const query = { subCategory: subCategory };
-			const result = await toyCollection.find(query).project({photoURL:1,toyName:1,price:1,ratings:1}).limit(2).toArray();
+		//for sending single toy data
+		app.get('/view_toy/:id', async (req, res) => {
+			const id = req.params.id;
+			// console.log(id);
+			const query = { _id: new ObjectId(id) };
+			const result = await toyCollection.findOne(query);
 			res.send(result);
 		});
 
+		//for sending specific toy data
+		app.get('/:sub_category', async (req, res) => {
+			const subCategory = req.params.sub_category;
+			const query = { subCategory: subCategory };
+			const result = await toyCollection
+				.find(query)
+				.project({ photoURL: 1, toyName: 1, price: 1, ratings: 1 })
+				.limit(2)
+				.toArray();
+			res.send(result);
+		});
+
+		//for receiving toy data
 		app.post('/add_toy', async (req, res) => {
 			// const toyData = req.body;
 
