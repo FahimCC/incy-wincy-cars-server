@@ -23,16 +23,16 @@ const client = new MongoClient(uri, {
 async function run() {
 	try {
 		// Connect the client to the server	(optional starting in v4.7)
-		client.connect();
+		// client.connect();
 
 		const toyCollection = client
 			.db('incyWincyCars')
 			.collection('toyCollection');
 
 		//create index for search
-		const indexKey = { toyName: 1 };
-		const indexOption = { name: 'toyIndex' };
-		await toyCollection.createIndex(indexKey, indexOption);
+		// const indexKeys = { toyName: 1 }; // Replace field1 and field2 with your actual field names
+		// const indexOptions = { name: 'toyNameIndex' }; // Replace index_name with the desired index name
+		// toyCollection.createIndex(indexKey, indexOption);
 		app.get('/all_toys/:searchText', async (req, res) => {
 			const searchText = req.params.searchText;
 			const result = await toyCollection
@@ -113,13 +113,12 @@ async function run() {
 
 		//to send specific toy data for my toy page
 		app.get('/my_toys', async (req, res) => {
-			
 			let query = {};
 			if (req.query?.email) {
 				query = { sellerEmail: req.query.email };
 			}
 			const sort = req?.query?.sort;
-			
+
 			const options = {
 				sort: { price: sort },
 			};
